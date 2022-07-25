@@ -77,9 +77,7 @@ export default {
         const res = await searchResultApi({
           keywords: this.title,
           limit: this.limit,
-          page: this.page,
         });
-        console.log(res);
         this.list = (res.data.result && res.data.result.songs) || [];
       } catch (e) {
         console.log(e);
@@ -99,17 +97,18 @@ export default {
     },
     async onLoad() {
       this.page++;
-      const res1 = await searchResultApi({
+      const res = await searchResultApi({
         keywords: this.title,
         limit: this.limit,
-        page: this.page,
+        offset: this.limit * (this.page - 1),
       });
-      if (!res1.data.result.songs) {
+      if (!res.data.result.songs) {
         this.finished = true;
         this.loading = false;
         return;
       }
-      this.list = [...this.list, ...res1.data.result.songs];
+      this.list = [...this.list, ...res.data.result.songs];
+      console.log(this.list);
       this.loading = true;
     },
   },
